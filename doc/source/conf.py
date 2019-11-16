@@ -15,6 +15,10 @@
 import sys
 import os
 
+git clone https://github.com/VACUMM/sphinx-fortran.git
+cd sphinx-fortran
+python setup.py install
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
