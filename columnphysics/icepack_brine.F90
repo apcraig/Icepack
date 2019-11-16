@@ -842,72 +842,72 @@
 
       character(len=*),parameter :: subname='(calculate_drho)'
 
-       rho_a (:) = c0
-       rho_2a(:) = c0
-       rho_b (:) = c0
-       rho_2b(:) = c0
-       drho  (:) = c0 ! surface is snow or atmosphere 
+      rho_a (:) = c0
+      rho_2a(:) = c0
+      rho_b (:) = c0
+      rho_2b(:) = c0
+      drho  (:) = c0 ! surface is snow or atmosphere 
 
-       do k = 1, nblyr+1   ! i_grid values
+      do k = 1, nblyr+1   ! i_grid values
 
-         !----------------------------------------------
-         ! h_avg(k) = i_grid(k)                        
-         ! Calculate rho_a(k), ie  average rho above i_grid(k) 
-         ! first part is good
-         !----------------------------------------------
+        !----------------------------------------------
+        ! h_avg(k) = i_grid(k)                        
+        ! Calculate rho_a(k), ie  average rho above i_grid(k) 
+        ! first part is good
+        !----------------------------------------------
 
-         if (k == 2) then
-            rho_a(2) = (brine_rho(2)*b_grid(2) &
-                     + (ibrine_rho(2) + brine_rho(2)) &
-                     * p5*(i_grid(2)-b_grid(2)) )/i_grid(2)
-            rho_b(2) = brine_rho(2)
+        if (k == 2) then
+           rho_a(2) = (brine_rho(2)*b_grid(2) &
+                    + (ibrine_rho(2) + brine_rho(2)) &
+                    * p5*(i_grid(2)-b_grid(2)) )/i_grid(2)
+           rho_b(2) = brine_rho(2)
 
-         elseif (k > 2 .AND. k < nblyr+1) then 
-            rho_a(k) = (rho_a(k-1)*i_grid(k-1)   + (ibrine_rho(k-1) + brine_rho(k)) &
-                     * p5*(b_grid(k)-i_grid(k-1)) + (ibrine_rho(k  ) + brine_rho(k)) &
-                     * p5*(i_grid(k)-b_grid(k)))/i_grid(k)
-            rho_b(k) = brine_rho(k)
-         else
-            rho_a(nblyr+1) = (rho_a(nblyr)*i_grid(nblyr) + (ibrine_rho(nblyr) + &
-                        brine_rho(nblyr+1))*p5*(b_grid(nblyr+1)-i_grid(nblyr)) + &
-                        brine_rho(nblyr+1)*(i_grid(nblyr+1)-b_grid(nblyr+1)))/i_grid(nblyr+1)
-            rho_a(1) = brine_rho(2)   !for k == 1 use grid point value
-            rho_b(nblyr+1) = brine_rho(nblyr+1)
-            rho_b(1) =  brine_rho(2)
-         endif
-
-     enddo     !k
-
-     !----------------------------------------------
-     ! Calculate average above and below k rho_2a
-     !----------------------------------------------
-
-     do k = 1, nblyr+1   !i_grid values
-        if (k == 1) then
-           rho_2a(1) = (rho_a(1)*b_grid(2) + p5*(brine_rho(2) + ibrine_rho(2)) &
-                     * (i_grid(2)-b_grid(2)))/i_grid(2)
-           rho_2b(1) = brine_rho(2)
+        elseif (k > 2 .AND. k < nblyr+1) then 
+           rho_a(k) = (rho_a(k-1)*i_grid(k-1)   + (ibrine_rho(k-1) + brine_rho(k)) &
+                    * p5*(b_grid(k)-i_grid(k-1)) + (ibrine_rho(k  ) + brine_rho(k)) &
+                    * p5*(i_grid(k)-b_grid(k)))/i_grid(k)
+           rho_b(k) = brine_rho(k)
         else
-           mstop = 2*(k-1) + 1
-           if (mstop < nblyr+1) then
-              rho_2a(k) = rho_a(mstop)
-              mstart = 2
-              mstop = 1
-           else
-              mstart = nblyr+2
-              mstop = nblyr+3
-           endif                     
-
-           do mm = mstart,mstop
-              rho_2a(k) =(rho_a(nblyr+1) + rhow*(c2*i_grid(k)-c1))*p5/i_grid(k)
-           enddo
-           rho_2b(k) = brine_rho(k+1)
+           rho_a(nblyr+1) = (rho_a(nblyr)*i_grid(nblyr) + (ibrine_rho(nblyr) + &
+                       brine_rho(nblyr+1))*p5*(b_grid(nblyr+1)-i_grid(nblyr)) + &
+                       brine_rho(nblyr+1)*(i_grid(nblyr+1)-b_grid(nblyr+1)))/i_grid(nblyr+1)
+           rho_a(1) = brine_rho(2)   !for k == 1 use grid point value
+           rho_b(nblyr+1) = brine_rho(nblyr+1)
+           rho_b(1) =  brine_rho(2)
         endif
-        drho(k) = max(rho_b(k) - rho_2b(k),max(c0,c2*(rho_a(k)-rho_2a(k)), &
-              c2*(brine_rho(k)-brine_rho(k+1))/real(nblyr,kind=dbl_kind)))
-     enddo
 
-     end subroutine calculate_drho
+      enddo     !k
+
+      !----------------------------------------------
+      ! Calculate average above and below k rho_2a
+      !----------------------------------------------
+
+      do k = 1, nblyr+1   !i_grid values
+         if (k == 1) then
+            rho_2a(1) = (rho_a(1)*b_grid(2) + p5*(brine_rho(2) + ibrine_rho(2)) &
+                      * (i_grid(2)-b_grid(2)))/i_grid(2)
+            rho_2b(1) = brine_rho(2)
+         else
+            mstop = 2*(k-1) + 1
+            if (mstop < nblyr+1) then
+               rho_2a(k) = rho_a(mstop)
+               mstart = 2
+               mstop = 1
+            else
+               mstart = nblyr+2
+               mstop = nblyr+3
+            endif                     
+
+            do mm = mstart,mstop
+               rho_2a(k) =(rho_a(nblyr+1) + rhow*(c2*i_grid(k)-c1))*p5/i_grid(k)
+            enddo
+            rho_2b(k) = brine_rho(k+1)
+         endif
+         drho(k) = max(rho_b(k) - rho_2b(k),max(c0,c2*(rho_a(k)-rho_2a(k)), &
+               c2*(brine_rho(k)-brine_rho(k+1))/real(nblyr,kind=dbl_kind)))
+      enddo
+
+      end subroutine calculate_drho
 
 !=======================================================================
 

@@ -18,7 +18,11 @@ import os
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#sys.path.insert(0, os.path.abspath('.'))
+
+this_dir = os.path.dirname(__file__)
+top_dir = os.path.abspath(os.path.join(this_dir, '..', '..'))
+#sys.path.insert(0, top_dir)
+#sys.path.append("xyz/abc")
 
 # -- General configuration ------------------------------------------------
 
@@ -35,7 +39,10 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
     'sphinx.ext.githubpages',
+    'sphinx.ext.autodoc',
     'sphinxcontrib.bibtex',
+    'sphinxfortran.fortran_domain',
+    'sphinxfortran.fortran_autodoc',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -366,3 +373,43 @@ epub_exclude_files = ['search.html']
 
 # If false, no index is generated.
 #epub_use_index = True
+
+
+# -- Options for Fortran output ------------------------------------------
+
+# Source files
+#fortran_src = '/Users/tcraig/Desktop/cice-consortium/icepack.spxfor/columnphysics/icepack_shortwave.F90'
+fortran_src = [os.path.abspath(os.path.join(top_dir, path))
+               for path in (
+                            'columnphysics/icepack_parameters.F90',
+#                            'columnphysics/icepack_tracers.F90',
+                            'columnphysics/icepack_itd.F90',
+                            'columnphysics/icepack_mechred.F90',
+                            'columnphysics/icepack_shortwave.F90',
+                            'columnphysics/icepack_brine.F90',
+                            'columnphysics/icepack_zbgc.F90',
+                            'columnphysics/icepack_atmo.F90',
+                            'columnphysics/icepack_ocean.F90',
+                            'columnphysics/icepack_orbital.F90',
+                            'columnphysics/icepack_therm_vertical.F90',
+                            'columnphysics/icepack_therm_itd.F90',
+                            'columnphysics/icepack_therm_shared.F90',
+                            'columnphysics/icepack_warnings.F90',
+                            )]
+print("fortran_src = ", fortran_src)
+
+# Possible extensions
+#fortran_ext = ['F90']
+
+# Fortran encoding
+fortran_encoding = "utf8"
+
+# section type, rubric or title
+fortran_subsection_type = "rubric"
+
+# title underline if using section type title
+fortran_title_underline = "-"
+
+# fortran indention spaces
+fortran_indent = 4
+

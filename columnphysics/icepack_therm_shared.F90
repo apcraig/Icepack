@@ -345,7 +345,7 @@
         
       endif               ! heat_capacity
       
-    end subroutine icepack_init_trcr
+      end subroutine icepack_init_trcr
 
 !=======================================================================
 

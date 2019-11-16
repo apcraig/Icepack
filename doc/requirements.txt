@@ -1,5 +1,7 @@
 #
 #
 sphinxcontrib-bibtex
+numpy
+sphinx-fortran
 #
 #

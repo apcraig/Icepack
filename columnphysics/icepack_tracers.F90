@@ -983,7 +983,7 @@
 
       enddo
 
-    end subroutine icepack_compute_tracers
+      end subroutine icepack_compute_tracers
 
 !=======================================================================
 

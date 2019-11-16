@@ -471,7 +471,7 @@
       ! Reload passive tracer array
       !-----------------------------------------------------------------
 
-    end subroutine thermo_vertical
+      end subroutine thermo_vertical
 
 !=======================================================================
 !
