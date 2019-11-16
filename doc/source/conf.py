@@ -27,7 +27,7 @@ top_dir = os.path.abspath(os.path.join(this_dir, '..', '..'))
 
 from git import Repo
 Repo.clone_from("https://github.com/VACUMM/sphinx-fortran.git","./sphinx-fortran")
-os.chdir(sphinx-fortran)
+os.chdir('sphinx-fortran')
 import subprocess
 subprocess.call(['python', 'setup.py', 'install'])
 os.chdir(this_dir)
