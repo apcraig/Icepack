@@ -3,6 +3,6 @@
 sphinxcontrib-bibtex
 numpy
 gitpython
-sphinx-fortran
+#sphinx-fortran
 #
 #

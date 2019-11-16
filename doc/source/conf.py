@@ -29,7 +29,7 @@ from git import Repo
 Repo.clone_from("https://github.com/VACUMM/sphinx-fortran.git","./sphinx-fortran")
 os.chdir('sphinx-fortran')
 import subprocess
-subprocess.call(['python', 'setup.py', 'install'])
+subprocess.call(['python3', 'setup.py', 'install'])
 os.chdir(this_dir)
 
 # -- General configuration ------------------------------------------------
