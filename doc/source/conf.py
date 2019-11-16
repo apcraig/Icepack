@@ -15,9 +15,6 @@
 import sys
 import os
 
-git clone https://github.com/VACUMM/sphinx-fortran.git
-cd sphinx-fortran
-python setup.py install
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -27,6 +24,12 @@ this_dir = os.path.dirname(__file__)
 top_dir = os.path.abspath(os.path.join(this_dir, '..', '..'))
 #sys.path.insert(0, top_dir)
 #sys.path.append("xyz/abc")
+
+from git import Repo
+Repo.clone_from(https://github.com/VACUMM/sphinx-fortran.git,sphinx-fortran)
+os.chdir(sphinx-fortran)
+setup.py install
+os.chdir(this_dir)
 
 # -- General configuration ------------------------------------------------
 
