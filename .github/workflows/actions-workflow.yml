@@ -41,8 +41,8 @@ jobs:
       - name: check conda env (zsh)
         shell: /bin/zsh -i -e {0}
         run: |
-          conda activate cice && type clang && type gfortran && type mpifort && type mpicc && type make
-          cat $HOME/miniconda/envs/cice/etc/conda/activate.d/activate_clang_osx-64.sh
+          conda activate icepack && type clang && type gfortran && type mpifort && type mpicc && type make
+          cat $HOME/miniconda/envs/icepack/etc/conda/activate.d/activate_clang_osx-64.sh
       - name: check setup case (zsh)
         run: |
           cd $HOME/icepack
