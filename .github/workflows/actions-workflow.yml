@@ -11,9 +11,9 @@ on:
     types:
       - created
 
-defaults:
-  run:
-    shell: /bin/csh {0}
+#defaults:
+#  run:
+#    shell: /bin/csh {0}
 
 jobs:
   build:
@@ -68,10 +68,10 @@ jobs:
           cd $HOME/icepack
           zsh -c 'source $HOME/.zshrc && ./icepack.setup -m conda -e macos -c ~/icepack-dirs/cases/case0 --pes 1x1 -s diag1'
       - name: check setup test (zsh)
+        shell: /bin/csh {0}
         run: |
           cd $HOME/icepack
           ./icepack.setup -m conda -e macos --test smoke --testid c0'
-        shell: /bin/csh {0}
       - name: compile ICEPACK (zsh)
         run: |
           cd $HOME/icepack
