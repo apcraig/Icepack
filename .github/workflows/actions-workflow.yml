@@ -53,7 +53,7 @@ jobs:
       - name: check setup case (zsh)
         run: |
           cd $HOME/icepack
-          zsh -c 'source $HOME/.zshrc && conda activate icepack && ./icepack.setup -m conda -e macos -c ~/icepack-dirs/cases/case0a --pes 1x1 -s diag1
+          zsh -c 'source $HOME/.zshrc && conda activate icepack && ./icepack.setup -m conda -e macos -c ~/icepack-dirs/cases/case0a --pes 1x1 -s diag1'
       - name: check setup test (zsh)
         run: |
           cd $HOME/icepack
