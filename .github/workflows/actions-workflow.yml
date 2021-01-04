@@ -35,6 +35,7 @@ jobs:
           cd $HOME && mkdir -p icepack-dirs/runs icepack-dirs/baseline icepack-dirs/input
           source $HOME/miniconda/bin/activate
           conda init zsh
+          conda init tcsh
           cd $HOME/icepack
           conda env create -f configuration/scripts/machines/environment.yml
       - name: check conda env (zsh)
@@ -42,10 +43,16 @@ jobs:
         run: |
           conda activate icepack && type clang && type gfortran && type make
           cat $HOME/miniconda/envs/icepack/etc/conda/activate.d/activate_clang_osx-64.sh
+      - name: check conda env (csh)
+        shell: /bin/csh {0}
+        run: |
+          conda activate icepack && type clang && type gfortran && type make
+          gfortran --version
+          clang --version
+          make --version
       - name: check setup case (zsh)
         run: |
           cd $HOME/icepack
-          zsh -c 'source $HOME/.zshrc && conda activate icepack'
           ./icepack.setup -m conda -e macos -c ~/icepack-dirs/cases/case0a --pes 1x1 -s diag1
       - name: check setup test (zsh)
         run: |
