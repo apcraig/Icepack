@@ -12,7 +12,8 @@ on:
       - created
 
 defaults:
-  shell: /bin/csh {0}
+  run:
+    shell: /bin/csh {0}
 
 jobs:
   build:
