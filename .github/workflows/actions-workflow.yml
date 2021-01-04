@@ -66,6 +66,7 @@ jobs:
           zsh -c 'source $HOME/.zshrc && ./icepack.build'
       - name: download input data
         run: |
+          cd $HOME/icepack-dirs/input
           wget https://zenodo.org/record/3728287/files/Icepack_data-20200326.tar.gz && tar xvfz ICEPACK_data-20200326.tar.gz -C ~
       - name: run ICEPACK (zsh)
         run: |
