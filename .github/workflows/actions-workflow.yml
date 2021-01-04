@@ -53,15 +53,15 @@ jobs:
       - name: check setup case (zsh)
         run: |
           cd $HOME/icepack
-          zsh -c 'source $HOME/.zshrc && conda activate icepack && ./icepack.setup -m conda -e macos -c ~/icepack-dirs/cases/case0a --pes 1x1 -s diag1'
+          zsh -c 'source $HOME/.zshrc && conda activate icepack && ./icepack.setup -m conda -e macos -c ~/icepack-dirs/cases/case0 --pes 1x1 -s diag1'
       - name: check setup test (zsh)
         run: |
           cd $HOME/icepack
-          ./icepack.setup -m conda -e macos -c ~/icepack-dirs/cases/case0b --test smoke
+          zsh -c 'source $HOME/.zshrc && ./icepack.setup -m conda -e macos --test smoke --testid c0'
       - name: compile ICEPACK (zsh)
         run: |
           cd $HOME/icepack
-          ./icepack.setup -m conda -e macos -c ~/icepack-dirs/cases/case1
+          zsh -c 'source $HOME/.zshrc && ./icepack.setup -m conda -e macos -c ~/icepack-dirs/cases/case1'
           cd ~/icepack-dirs/cases/case1
           zsh -c 'source $HOME/.zshrc && ./icepack.build'
       - name: download input data
