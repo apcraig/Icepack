@@ -71,7 +71,7 @@ jobs:
         shell: /bin/csh {0}
         run: |
           cd $HOME/icepack
-          ./icepack.setup -m conda -e macos --test smoke --testid c0'
+          ./icepack.setup -m conda -e macos --test smoke --testid c0
       - name: compile ICEPACK (zsh)
         run: |
           cd $HOME/icepack
