@@ -71,5 +71,6 @@ jobs:
         run: |
           cd ~/icepack-dirs/cases/case1
           zsh -c 'source $HOME/.zshrc && ./icepack.run'
-          cat ~/icepack-dirs/cases/case1/logs/icepac.runlog*
-
+      - name: check failure
+        if: ${{ failure() }}
+        run: cat ~/icepack-dirs/cases/case1/logs/icepack.runlog*
