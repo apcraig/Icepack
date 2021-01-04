@@ -1,11 +1,21 @@
 name: Catalina
 # This workflow is triggered on pushes to the repository.
-on: [push]
+on:
+  push:
+    branches:
+      - main
+      - 'Icepack*'
+  pull-requests:
+  release:
+    types:
+      - created
+
+defaults:
+  shell: /bin/csh {0}
 
 jobs:
   build:
     name: "conda-env Catalina"
-    # This job runs on macOS 10.15 Catalina
     runs-on: macos-latest
     steps:
       - name: reset toolchain to commandlinetools
@@ -58,7 +68,8 @@ jobs:
       - name: check setup test (zsh)
         run: |
           cd $HOME/icepack
-          zsh -c 'source $HOME/.zshrc && ./icepack.setup -m conda -e macos --test smoke --testid c0'
+          ./icepack.setup -m conda -e macos --test smoke --testid c0'
+        shell: /bin/csh {0}
       - name: compile ICEPACK (zsh)
         run: |
           cd $HOME/icepack
