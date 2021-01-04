@@ -68,11 +68,12 @@ jobs:
       - name: download input data
         run: |
           cd $HOME/icepack-dirs/input
-          wget https://zenodo.org/record/3728287/files/Icepack_data-20200326.tar.gz && tar xvfz ICEPACK_data-20200326.tar.gz -C ~
+          wget https://zenodo.org/record/3728287/files/Icepack_data-20200326.tar.gz && tar xvfz ICEPACK_data-20200326.tar.gz
+          pwd
+          ls -alR
       - name: run ICEPACK (zsh)
         run: |
           cd ~/icepack-dirs/cases/case1
-          ls -al $HOME/icepack-dirs/input/Icepack_data/forcing
           zsh -c 'source $HOME/.zshrc && ./icepack.run'
       - name: check failure
         if: ${{ failure() }}
