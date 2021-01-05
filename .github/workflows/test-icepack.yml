@@ -64,7 +64,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: 'recursive'
-      - name: link Icepack
+      - name: link
         run: |
            echo "ls -al ${HOME}/"
            echo "ls -al ${GITHUB_WORKSPACE}/"
