@@ -1,4 +1,4 @@
-name: MacOS
+name: GithubActionsIcepackTesting
 # This workflow is triggered on pushes to the repository.
 on:
   push:
@@ -17,7 +17,7 @@ defaults:
 
 jobs:
   build:
-    name: "conda-env MacOS"
+    name: "IcepackTesting"
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -32,7 +32,7 @@ jobs:
     steps:
       - name: reset macos toolchain to commandlinetools
         shell: /bin/bash {0}
-        if: contains( ${{ matrix.envdef }},'macos')
+        if: contains( ${{ matrix.envdef }}, 'macos')
         run: |
           sudo xcode-select -r
           sudo xcode-select -s /Library/Developer/CommandLineTools
@@ -65,8 +65,8 @@ jobs:
       - name: link Icepack
         run: |
            ln -s $GITHUB_WORKSPACE/../Icepack $HOME/icepack
-           ls -al $HOME
-           ls -al $GITHUB_WORKSPACE
+#           ls -al $HOME
+#           ls -al $GITHUB_WORKSPACE
       - name: setup "icepack" conda env
         shell: /bin/bash {0}
         run: |
