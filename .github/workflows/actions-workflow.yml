@@ -21,7 +21,6 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: reset toolchain to commandlinetools
-#        shell: /bin/csh {0}
         run: |
           sudo xcode-select -r
           sudo xcode-select -s /Library/Developer/CommandLineTools
@@ -44,7 +43,6 @@ jobs:
           wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh
           bash ~/miniconda.sh -b -p $HOME/miniconda
       - name: clone Icepack
-#        shell: /bin/csh {0}
         run: |
           git clone --recurse-submodules --single-branch --depth=1 --shallow-submodules https://github.com/CICE-Consortium/Icepack.git $HOME/icepack
       - name: setup "icepack" conda env
@@ -62,41 +60,47 @@ jobs:
           conda activate icepack && type clang && type gfortran && type make
           cat $HOME/miniconda/envs/icepack/etc/conda/activate.d/activate_clang_osx-64.sh
       - name: check conda env
-#        shell: /bin/csh {0}
         run: |
           conda activate icepack && type clang && type gfortran && type make
           gfortran --version
           clang --version
           make --version
       - name: check setup case
-#        shell: /bin/csh {0}
         run: |
           cd $HOME/icepack
           ./icepack.setup -m conda -e macos -c ~/icepack-dirs/cases/case0 --pes 1x1 -s diag1
       - name: check setup test
-#        shell: /bin/csh {0}
         run: |
           cd $HOME/icepack
           ./icepack.setup -m conda -e macos --test smoke --testid c0
       - name: compile ICEPACK
-#        shell: /bin/csh {0}
         run: |
           cd $HOME/icepack
           ./icepack.setup -m conda -e macos -c ~/icepack-dirs/cases/case1
           cd ~/icepack-dirs/cases/case1
           ./icepack.build
       - name: download input data
-#        shell: /bin/csh {0}
         run: |
           cd $HOME/icepack-dirs/input
           wget https://zenodo.org/record/3728287/files/Icepack_data-20200326.tar.gz && tar xvfz ICEPACK_data-20200326.tar.gz
           pwd
           ls -alR
       - name: run ICEPACK
-#        shell: /bin/csh {0}
         run: |
           cd ~/icepack-dirs/cases/case1
           ./icepack.run
+      - name: run suite
+        run: |
+          cd $HOME/icepack
+          ./icepack.setup -m conda -e macos --suite travis_suite --testid ghamac
+          cd testsuite.ghamac
+          ./results.csh
       - name: check failure
         if: ${{ failure() }}
-        run: cat ~/icepack-dirs/cases/case1/logs/icepack.runlog*
+        run: |
+          cat ~/icepack-dirs/cases/case1/logs/icepack.runlog*
+          foreach runlog ($HOME/icepack/testsuite.ghamac/*.ghamac/logs/icepack.runlog.*)
+          echo " "
+          echo "### Contents of $runlog ###' && cat $runlog
+          end
+
