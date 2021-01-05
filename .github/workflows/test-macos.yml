@@ -48,7 +48,7 @@ jobs:
       - name: link Icepack
         run: |
            ls -al $GITHUB_WORKSPACE
-           ln -s $GITHUB_WORKSPACE/Icepack $HOME/icepack
+           ln -s $GITHUB_WORKSPACE/../Icepack $HOME/icepack
 #          git clone --recurse-submodules --single-branch --depth=1 --shallow-submodules https://github.com/CICE-Consortium/Icepack.git $HOME/icepack
       - name: setup "icepack" conda env
         shell: /bin/bash {0}
