@@ -102,16 +102,8 @@ jobs:
           pwd
           echo "tcx1"
           ls -al
-          echo "tcx2a"
-          ls -al ./.github/scripts/write_logfiles.csh
-          echo "tcx2b"
-          ls -al .github/scripts/write_logfiles.csh
-          echo "tcx2c"
-          ls -al ./.github/scripts
-          echo "tcx2d"
-          ls -al ./.github
           echo "tcx3"
-          ./.github/scripts/write_logfiles.csh
+          ./write_logfiles.csh
       - name: trap failure
         if: ${{ failure() }}
         run: |
