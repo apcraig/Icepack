@@ -21,7 +21,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
+#        os: [macos-latest, ubuntu-latest]
+        os: [macos-latest]
         include: 
           - os: macos-latest
             envdef: macos
@@ -32,7 +33,7 @@ jobs:
     steps:
       - name: reset macos toolchain to commandlinetools
         shell: /bin/bash {0}
-        if: contains( ${{ matrix.envdef }},'macos'
+        if: contains( ${{ matrix.envdef }},'macos')
         run: |
           sudo xcode-select -r
           sudo xcode-select -s /Library/Developer/CommandLineTools
