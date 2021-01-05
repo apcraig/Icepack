@@ -1,4 +1,4 @@
-name: Catalina
+name: MacOS
 # This workflow is triggered on pushes to the repository.
 on:
   push:
@@ -17,7 +17,7 @@ defaults:
 
 jobs:
   build:
-    name: "conda-env Catalina"
+    name: "conda-env MacOS"
     runs-on: macos-latest
     steps:
       - name: reset toolchain to commandlinetools
@@ -101,7 +101,7 @@ jobs:
           cd $HOME/icepack
           pwd
           ls -al
-          ./.github/workflows/write_logfile.csh
+          ./.github/workflows/write_logfiles.csh
       - name: trap failure
         if: ${{ failure() }}
         run: |
