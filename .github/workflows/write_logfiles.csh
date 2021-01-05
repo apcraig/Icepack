@@ -1,4 +1,4 @@
-#!bin/csh 
+#!/bin/csh 
 
 foreach logfile (case*/logs/icepack.runlog* testsuite.*/*/logs/icepack.runlog*)
   echo "### ${logfile} ###"
