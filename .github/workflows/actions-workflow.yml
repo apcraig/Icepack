@@ -99,7 +99,6 @@ jobs:
 #        if: ${{ failure() }}
         run: |
           cd $HOME/icepack
-#          cat ~/icepack-dirs/cases/case1/logs/icepack.runlog*
           pwd
           ls -al
           foreach runlog (case*/logs/icepack.runlog.*); echo " "; echo "### tail -100 of $runlog ###' && tail -100 $runlog; end
