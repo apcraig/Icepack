@@ -65,6 +65,7 @@ jobs:
         with:
           submodules: 'recursive'
       - name: link
+        shell: /bin/bash {0}
         run: |
            echo "ls -al ${HOME}/"
            echo "ls -al ${GITHUB_WORKSPACE}/"
