@@ -1,5 +1,5 @@
 name: GithubActionsIcepackTesting
-# This workflow is triggered on pushes to the repository.
+# This workflow is triggered on pushes, pull-requeust, and releases
 on:
   push:
     branches:
@@ -67,8 +67,8 @@ jobs:
       - name: link
         run: |
            ln -s ${GITHUB_WORKSPACE}/../Icepack ${HOME}/icepack
-           ls -al ${HOME}/
-           ls -al ${GITHUB_WORKSPACE}/
+#           ls -al ${HOME}/
+#           ls -al ${GITHUB_WORKSPACE}/
       - name: setup conda env
         shell: /bin/bash {0}
         run: |
@@ -78,13 +78,7 @@ jobs:
           conda init tcsh
           cd $HOME/icepack
           conda env create -f configuration/scripts/machines/environment.yml
-#      - name: check conda env (zsh)
-#        shell: /bin/zsh -i -e {0}
-#        run: |
-#          conda activate icepack && type clang && type gfortran && type make
-#          cat $HOME/miniconda/envs/icepack/etc/conda/activate.d/activate_clang_osx-64.sh
       - name: check conda env
-#        shell: /bin/bash {0}
         run: |
           conda activate icepack && type clang && type gfortran && type make
           gfortran --version
@@ -118,19 +112,19 @@ jobs:
       - name: run suite
         run: |
           cd $HOME/icepack
-          ./icepack.setup -m conda -e ${{ matrix.envdef }} --suite quick_suite --testid ${{ matrix.os }}
-          cd testsuite.${{ matrix.os }}
-          ./results.csh
+          ./icepack.setup -m conda -e ${{ matrix.envdef }} --suite travis_suite --testid ${{ matrix.os }}
       - name: write output
         run: |
           cd $HOME/icepack
           ./.github/workflows/write_logfiles.csh
+          cd testsuite.${{ matrix.os }}
+          ./results.csh
       - name: successful run
         if: ${{ success() }}
         run: |
-          echo "${{ job }} PASSED"
+          echo "${{ job.name }} PASSED"
       - name: trap failure
         if: ${{ failure() }}
         run: |
-          echo "${{ job }} FAILED"
+          echo "${{ job.name }} FAILED"
           exit 99
