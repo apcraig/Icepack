@@ -69,9 +69,9 @@ jobs:
         run: |
            echo "ls -al ${HOME}/"
            echo "ls -al ${GITHUB_WORKSPACE}/"
-#           ls -al ${HOME}/
-#           ls -al ${GITHUB_WORKSPACE}/
-#           mv ${GITHUB_WORKSPACE}/../Icepack ${HOME}/icepack
+           ls -al ${HOME}/
+           ls -al ${GITHUB_WORKSPACE}/
+           ln -s ${GITHUB_WORKSPACE}/../Icepack ${HOME}/icepack
       - name: setup "icepack" conda env
         shell: /bin/bash {0}
         run: |
