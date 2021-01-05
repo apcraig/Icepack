@@ -95,8 +95,8 @@ jobs:
           ./icepack.setup -m conda -e macos --suite travis_suite --testid ghamac
           cd testsuite.ghamac
           ./results.csh
-      - name: check failure
-        if: ${{ failure() }}
+      - name: write output
+#        if: ${{ failure() }}
         run: |
           cat ~/icepack-dirs/cases/case1/logs/icepack.runlog*
           foreach runlog ($HOME/icepack/testsuite.ghamac/*.ghamac/logs/icepack.runlog.*)
