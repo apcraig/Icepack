@@ -87,6 +87,7 @@ jobs:
 #          conda activate icepack && type clang && type gfortran && type make
 #          cat $HOME/miniconda/envs/icepack/etc/conda/activate.d/activate_clang_osx-64.sh
       - name: check conda env
+        shell: /bin/bash {0}
         run: |
           conda activate icepack && type clang && type gfortran && type make
           gfortran --version
