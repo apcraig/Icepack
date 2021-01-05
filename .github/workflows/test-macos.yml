@@ -102,8 +102,14 @@ jobs:
           pwd
           echo "tcx1"
           ls -al
-          echo "tcx2"
+          echo "tcx2a"
           ls -al ./.github/workflows/write_logfiles.csh
+          echo "tcx2b"
+          ls -al .github/workflows/write_logfiles.csh
+          echo "tcx2c"
+          ls -al ./.github/workflows
+          echo "tcx2d"
+          ls -al ./.github
           echo "tcx3"
           ./.github/workflows/write_logfiles.csh
       - name: trap failure
