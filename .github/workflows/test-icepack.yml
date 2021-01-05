@@ -13,7 +13,7 @@ on:
 
 defaults:
   run:
-    shell: /bin/bash {0}
+    shell: /bin/tcsh {0}
 
 jobs:
   build:
