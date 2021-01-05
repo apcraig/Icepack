@@ -68,7 +68,7 @@ jobs:
       - name: check setup case
         run: |
           cd $HOME/icepack
-          ./icepack.setup -m conda -e macos -c ~/icepack-dirs/cases/case0 --pes 1x1 -s diag1
+          ./icepack.setup -m conda -e macos -c case0 --pes 1x1 -s diag1
       - name: check setup test
         run: |
           cd $HOME/icepack
@@ -76,7 +76,7 @@ jobs:
       - name: compile ICEPACK
         run: |
           cd $HOME/icepack
-          ./icepack.setup -m conda -e macos -c ~/icepack-dirs/cases/case1
+          ./icepack.setup -m conda -e macos -c case1
           cd ~/icepack-dirs/cases/case1
           ./icepack.build
       - name: download input data
@@ -89,18 +89,17 @@ jobs:
         run: |
           cd ~/icepack-dirs/cases/case1
           ./icepack.run
-      - name: run suite
-        run: |
-          cd $HOME/icepack
-          ./icepack.setup -m conda -e macos --suite travis_suite --testid ghamac
-          cd testsuite.ghamac
-          ./results.csh
+#      - name: run suite
+#        run: |
+#          cd $HOME/icepack
+#          ./icepack.setup -m conda -e macos --suite travis_suite --testid ghamac
+#          cd testsuite.ghamac
+#          ./results.csh
       - name: write output
 #        if: ${{ failure() }}
         run: |
-          cat ~/icepack-dirs/cases/case1/logs/icepack.runlog*
-          foreach runlog ($HOME/icepack/testsuite.ghamac/*.ghamac/logs/icepack.runlog.*)
-          echo " "
-          echo "### Contents of $runlog ###' && cat $runlog
-          end
-
+          cd $HOME/icepack
+#          cat ~/icepack-dirs/cases/case1/logs/icepack.runlog*
+          pwd
+          ls -al
+          foreach runlog (case*/logs/icepack.runlog.*); echo " "; echo "### tail -100 of $runlog ###' && tail -100 $runlog; end
