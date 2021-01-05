@@ -26,7 +26,7 @@ jobs:
           - os: macos-latest
             envdef: macos
             minicond: Miniconda3-latest-MacOSX-x86_64.sh
-          - os: ubnuntu-latest
+          - os: ubuntu-latest
             envdef: linux
             minicond: Miniconda3-latest-Linux-x86_64.sh
     steps:
