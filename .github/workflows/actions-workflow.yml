@@ -90,16 +90,19 @@ jobs:
           cd $HOME/icepack
           cd case1
           ./icepack.run
-#      - name: run suite
-#        run: |
-#          cd $HOME/icepack
-#          ./icepack.setup -m conda -e macos --suite travis_suite --testid ghamac
-#          cd testsuite.ghamac
-#          ./results.csh
+      - name: run suite
+        run: |
+          cd $HOME/icepack
+          ./icepack.setup -m conda -e macos --suite quick_suite --testid ghamac
+          cd testsuite.ghamac
+          ./results.csh
       - name: write output
-#        if: ${{ failure() }}
         run: |
           cd $HOME/icepack
           pwd
           ls -al
-          csh -c 'foreach runlog (case*/logs/icepack.runlog.*); echo " "; echo "### tail -100 of $runlog ###'; tail -100 $runlog; end'
+          ./.github/workflows/write_logfile.csh
+      - name: trap failure
+        if: ${{ failure() }}
+          echo "${{ job }} FAILED"
+          exit 1
