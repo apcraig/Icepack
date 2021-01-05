@@ -87,6 +87,7 @@ jobs:
           ls -alR
       - name: run ICEPACK
         run: |
+          cd $HOME/icepack
           cd case1
           ./icepack.run
 #      - name: run suite
