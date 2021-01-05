@@ -18,7 +18,14 @@ defaults:
 jobs:
   build:
     name: "conda-env MacOS"
-    runs-on: macos-latest
+    runs-on: {{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest]
+        include: 
+          - os: macos-latest
+            screnv: macos
+            minicond: Miniconda3-latest-MacOSX-x86_64.sh
     steps:
       - name: reset toolchain to commandlinetools
         run: |
@@ -36,12 +43,15 @@ jobs:
           echo "sw_vers: $(sw_vers)"
           echo "HOME: $HOME"
           echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
+          echo "OS: {{ matrix.os }}"
+          echo "SCRENV: {{ matrix.screnv }}"
+          echo "MINICOND: {{ matrix.minicond }}"
           echo "xcrun --show-sdk-path: $(xcrun --show-sdk-path)"
           echo "xcode-select -p: $(xcode-select -p)"
       - name : install miniconda
         shell: /bin/bash {0}
         run: |
-          wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh
+          wget https://repo.anaconda.com/miniconda/{{ matrix.minicond }} -O ~/miniconda.sh
           bash ~/miniconda.sh -b -p $HOME/miniconda
       - name: clone Icepack
         uses: actions/checkout@v2
@@ -76,15 +86,15 @@ jobs:
       - name: check setup case
         run: |
           cd $HOME/icepack
-          ./icepack.setup -m conda -e macos -c case0 --pes 1x1 -s diag1
+          ./icepack.setup -m conda -e {{ matrix.screnv }} -c case0 --pes 1x1 -s diag1
       - name: check setup test
         run: |
           cd $HOME/icepack
-          ./icepack.setup -m conda -e macos --test smoke --testid c0
+          ./icepack.setup -m conda -e {{ matrix.screnv }} --test smoke --testid c0
       - name: compile ICEPACK
         run: |
           cd $HOME/icepack
-          ./icepack.setup -m conda -e macos -c case1
+          ./icepack.setup -m conda -e {{ matrix.screnv }} -c case1
           cd case1
           ./icepack.build
       - name: download input data
@@ -101,13 +111,13 @@ jobs:
       - name: run suite
         run: |
           cd $HOME/icepack
-          ./icepack.setup -m conda -e macos --suite quick_suite --testid ghamac
+          ./icepack.setup -m conda -e {{ matrix.screnv }} --suite quick_suite --testid ghamac
           cd testsuite.ghamac
           ./results.csh
       - name: write output
         run: |
           cd $HOME/icepack
-          ./github/workflows/write_logfiles.csh
+          ./.github/workflows/write_logfiles.csh
       - name: trap failure
         if: ${{ failure() }}
         run: |
