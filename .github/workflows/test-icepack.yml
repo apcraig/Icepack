@@ -13,7 +13,7 @@ on:
 
 defaults:
   run:
-    shell: /bin/tcsh {0}
+    shell: /bin/bash {0}
 
 jobs:
   build:
@@ -95,6 +95,7 @@ jobs:
           make --version
       - name: check setup case
         run: |
+          ls -al /bin/
           cd $HOME/icepack
           ./icepack.setup -m conda -e ${{ matrix.envdef }} -c case0 --pes 1x1 -s diag1
       - name: check setup test
