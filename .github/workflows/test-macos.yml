@@ -45,6 +45,7 @@ jobs:
           bash ~/miniconda.sh -b -p $HOME/miniconda
       - name: clone Icepack
         uses: actions/checkout@v2
+      - name: link Icepack
         run: |
            ls -al $GITHUB_WORKSPACE
            ln -s $GITHUB_WORKSPACE/Icepack $HOME/icepack
