@@ -13,7 +13,7 @@ on:
 
 defaults:
   run:
-    shell: /bin/bash {0}
+    shell: /bin/csh {0}
 
 jobs:
   build:
@@ -22,15 +22,15 @@ jobs:
     strategy:
       matrix:
 #        os: [macos-latest, ubuntu-latest]
-#        os: [macos-latest]
-        os: [ubuntu-latest]
+        os: [macos-latest]
+#        os: [ubuntu-latest]
         include: 
-#          - os: macos-latest
-#            envdef: macos
-#            minicond: Miniconda3-latest-MacOSX-x86_64.sh
-          - os: ubuntu-latest
-            envdef: linux
-            minicond: Miniconda3-latest-Linux-x86_64.sh
+          - os: macos-latest
+            envdef: macos
+            minicond: Miniconda3-latest-MacOSX-x86_64.sh
+#          - os: ubuntu-latest
+#            envdef: linux
+#            minicond: Miniconda3-latest-Linux-x86_64.sh
     steps:
       - name: reset macos toolchain to commandlinetools
         shell: /bin/bash {0}
@@ -60,20 +60,17 @@ jobs:
         run: |
           wget https://repo.anaconda.com/miniconda/${{ matrix.minicond }} -O ~/miniconda.sh
           bash ~/miniconda.sh -b -p $HOME/miniconda
-      - name: clone Icepack
+      - name: clone
         uses: actions/checkout@v2
         with:
           submodules: 'recursive'
       - name: link
-        shell: /bin/bash {0}
         run: |
-           echo "ls -al ${HOME}/"
-           echo "ls -al ${GITHUB_WORKSPACE}/"
+           ln -s ${GITHUB_WORKSPACE}/../Icepack ${HOME}/icepack
            ls -al ${HOME}/
            ls -al ${GITHUB_WORKSPACE}/
-           ln -s ${GITHUB_WORKSPACE}/../Icepack ${HOME}/icepack
-      - name: setup "icepack" conda env
-        shell: /bin/bash {0}
+      - name: setup conda env
+#        shell: /bin/bash {0}
         run: |
           cd $HOME && mkdir -p icepack-dirs/runs icepack-dirs/baseline icepack-dirs/input
           source $HOME/miniconda/bin/activate
@@ -87,7 +84,7 @@ jobs:
 #          conda activate icepack && type clang && type gfortran && type make
 #          cat $HOME/miniconda/envs/icepack/etc/conda/activate.d/activate_clang_osx-64.sh
       - name: check conda env
-        shell: /bin/bash {0}
+#        shell: /bin/bash {0}
         run: |
           conda activate icepack && type clang && type gfortran && type make
           gfortran --version
@@ -95,14 +92,13 @@ jobs:
           make --version
       - name: check setup case
         run: |
-          ls -al /bin/
           cd $HOME/icepack
           ./icepack.setup -m conda -e ${{ matrix.envdef }} -c case0 --pes 1x1 -s diag1
       - name: check setup test
         run: |
           cd $HOME/icepack
           ./icepack.setup -m conda -e ${{ matrix.envdef }} --test smoke --testid c0
-#      - name: compile ICEPACK
+#      - name: compile case
 #        run: |
 #          cd $HOME/icepack
 #          ./icepack.setup -m conda -e ${{ matrix.envdef }} -c case1
@@ -114,7 +110,7 @@ jobs:
           wget https://zenodo.org/record/3728287/files/Icepack_data-20200326.tar.gz && tar xvfz ICEPACK_data-20200326.tar.gz
           pwd
           ls -alR
-#      - name: run ICEPACK
+#      - name: run case
 #        run: |
 #          cd $HOME/icepack
 #          cd case1
