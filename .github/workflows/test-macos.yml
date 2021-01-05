@@ -100,7 +100,11 @@ jobs:
         run: |
           cd $HOME/icepack
           pwd
+          echo "tcx1"
           ls -al
+          echo "tcx2"
+          ls -al ./.github/workflows/write_logfiles.csh
+          echo "tcx3"
           ./.github/workflows/write_logfiles.csh
       - name: trap failure
         if: ${{ failure() }}
