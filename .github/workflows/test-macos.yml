@@ -103,15 +103,15 @@ jobs:
           echo "tcx1"
           ls -al
           echo "tcx2a"
-          ls -al ./.github/workflows/write_logfiles.csh
+          ls -al ./.github/scripts/write_logfiles.csh
           echo "tcx2b"
-          ls -al .github/workflows/write_logfiles.csh
+          ls -al .github/scripts/write_logfiles.csh
           echo "tcx2c"
-          ls -al ./.github/workflows
+          ls -al ./.github/scripts
           echo "tcx2d"
           ls -al ./.github
           echo "tcx3"
-          ./.github/workflows/write_logfiles.csh
+          ./.github/scripts/write_logfiles.csh
       - name: trap failure
         if: ${{ failure() }}
         run: |
