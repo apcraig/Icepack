@@ -104,5 +104,6 @@ jobs:
           ./.github/workflows/write_logfile.csh
       - name: trap failure
         if: ${{ failure() }}
+        run: |
           echo "${{ job }} FAILED"
           exit 1
