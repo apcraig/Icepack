@@ -21,16 +21,23 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [macos-latest ubuntu-latest]
         include: 
           - os: macos-latest
-            screnv: macos
+            envdef: macos
             minicond: Miniconda3-latest-MacOSX-x86_64.sh
+          - os: ubnuntu-latest
+            envdef: linux
+            minicond: Miniconda3-latest-Linux-x86_64.sh
     steps:
-      - name: reset toolchain to commandlinetools
+      - name: reset macos toolchain to commandlinetools
+        shell: /bin/bash {0}
+        if: contains( ${{ matrix.envdef }},'macos'
         run: |
           sudo xcode-select -r
           sudo xcode-select -s /Library/Developer/CommandLineTools
+          echo "xcrun --show-sdk-path: $(xcrun --show-sdk-path)"
+          echo "xcode-select -p: $(xcode-select -p)"
       - name: system info
         shell: /bin/bash {0}
         run: |
@@ -44,10 +51,8 @@ jobs:
           echo "HOME: $HOME"
           echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
           echo "OS: ${{ matrix.os }}"
-          echo "SCRENV: ${{ matrix.screnv }}"
+          echo "ENVDEF: ${{ matrix.envdef }}"
           echo "MINICOND: ${{ matrix.minicond }}"
-          echo "xcrun --show-sdk-path: $(xcrun --show-sdk-path)"
-          echo "xcode-select -p: $(xcode-select -p)"
       - name : install miniconda
         shell: /bin/bash {0}
         run: |
@@ -59,10 +64,8 @@ jobs:
           submodules: 'recursive'
       - name: link Icepack
         run: |
-           ls -al $GITHUB_WORKSPACE
            ln -s $GITHUB_WORKSPACE/../Icepack $HOME/icepack
-           ls -al $HOME
-#          git clone --recurse-submodules --single-branch --depth=1 --shallow-submodules https://github.com/CICE-Consortium/Icepack.git $HOME/icepack
+           ls -al $HOME/icepack
       - name: setup "icepack" conda env
         shell: /bin/bash {0}
         run: |
@@ -72,11 +75,11 @@ jobs:
           conda init tcsh
           cd $HOME/icepack
           conda env create -f configuration/scripts/machines/environment.yml
-      - name: check conda env (zsh)
-        shell: /bin/zsh -i -e {0}
-        run: |
-          conda activate icepack && type clang && type gfortran && type make
-          cat $HOME/miniconda/envs/icepack/etc/conda/activate.d/activate_clang_osx-64.sh
+#      - name: check conda env (zsh)
+#        shell: /bin/zsh -i -e {0}
+#        run: |
+#          conda activate icepack && type clang && type gfortran && type make
+#          cat $HOME/miniconda/envs/icepack/etc/conda/activate.d/activate_clang_osx-64.sh
       - name: check conda env
         run: |
           conda activate icepack && type clang && type gfortran && type make
@@ -86,40 +89,44 @@ jobs:
       - name: check setup case
         run: |
           cd $HOME/icepack
-          ./icepack.setup -m conda -e ${{ matrix.screnv }} -c case0 --pes 1x1 -s diag1
+          ./icepack.setup -m conda -e ${{ matrix.envdef }} -c case0 --pes 1x1 -s diag1
       - name: check setup test
         run: |
           cd $HOME/icepack
-          ./icepack.setup -m conda -e ${{ matrix.screnv }} --test smoke --testid c0
-      - name: compile ICEPACK
-        run: |
-          cd $HOME/icepack
-          ./icepack.setup -m conda -e ${{ matrix.screnv }} -c case1
-          cd case1
-          ./icepack.build
+          ./icepack.setup -m conda -e ${{ matrix.envdef }} --test smoke --testid c0
+#      - name: compile ICEPACK
+#        run: |
+#          cd $HOME/icepack
+#          ./icepack.setup -m conda -e ${{ matrix.envdef }} -c case1
+#          cd case1
+#          ./icepack.build
       - name: download input data
         run: |
           cd $HOME/icepack-dirs/input
           wget https://zenodo.org/record/3728287/files/Icepack_data-20200326.tar.gz && tar xvfz ICEPACK_data-20200326.tar.gz
           pwd
           ls -alR
-      - name: run ICEPACK
-        run: |
-          cd $HOME/icepack
-          cd case1
-          ./icepack.run
+#      - name: run ICEPACK
+#        run: |
+#          cd $HOME/icepack
+#          cd case1
+#          ./icepack.run
       - name: run suite
         run: |
           cd $HOME/icepack
-          ./icepack.setup -m conda -e ${{ matrix.screnv }} --suite quick_suite --testid ghamac
-          cd testsuite.ghamac
+          ./icepack.setup -m conda -e ${{ matrix.envdef }} --suite quick_suite --testid ${{ matrix.os }}
+          cd testsuite.${{ matrix.os }}
           ./results.csh
       - name: write output
         run: |
           cd $HOME/icepack
           ./.github/workflows/write_logfiles.csh
+      - name: successful run
+        if: ${{ success() }}
+        run: |
+          echo "${{ job }} PASSED"
       - name: trap failure
         if: ${{ failure() }}
         run: |
           echo "${{ job }} FAILED"
-          exit 1
+          exit 99
