@@ -77,7 +77,7 @@ jobs:
         run: |
           cd $HOME/icepack
           ./icepack.setup -m conda -e macos -c case1
-          cd ~/icepack-dirs/cases/case1
+          cd case1
           ./icepack.build
       - name: download input data
         run: |
@@ -87,7 +87,7 @@ jobs:
           ls -alR
       - name: run ICEPACK
         run: |
-          cd ~/icepack-dirs/cases/case1
+          cd case1
           ./icepack.run
 #      - name: run suite
 #        run: |
