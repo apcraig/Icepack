@@ -102,4 +102,4 @@ jobs:
           cd $HOME/icepack
           pwd
           ls -al
-          foreach runlog (case*/logs/icepack.runlog.*); echo " "; echo "### tail -100 of $runlog ###' && tail -100 $runlog; end
+          csh -c 'foreach runlog (case*/logs/icepack.runlog.*); echo " "; echo "### tail -100 of $runlog ###'; tail -100 $runlog; end'
