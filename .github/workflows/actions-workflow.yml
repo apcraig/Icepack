@@ -47,7 +47,7 @@ jobs:
         run: |
           git clone --recurse-submodules --single-branch --depth=1 --shallow-submodules https://github.com/CICE-Consortium/Icepack.git $HOME/icepack
       - name: setup "icepack" conda env
-        shell: /bin/csh {0}
+        shell: /bin/bash {0}
         run: |
           cd $HOME && mkdir -p icepack-dirs/runs icepack-dirs/baseline icepack-dirs/input
           source $HOME/miniconda/bin/activate
