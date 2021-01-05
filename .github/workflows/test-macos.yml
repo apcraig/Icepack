@@ -45,10 +45,13 @@ jobs:
           bash ~/miniconda.sh -b -p $HOME/miniconda
       - name: clone Icepack
         uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
       - name: link Icepack
         run: |
            ls -al $GITHUB_WORKSPACE
            ln -s $GITHUB_WORKSPACE/../Icepack $HOME/icepack
+           ls -al $HOME
 #          git clone --recurse-submodules --single-branch --depth=1 --shallow-submodules https://github.com/CICE-Consortium/Icepack.git $HOME/icepack
       - name: setup "icepack" conda env
         shell: /bin/bash {0}
@@ -104,11 +107,7 @@ jobs:
       - name: write output
         run: |
           cd $HOME/icepack
-          pwd
-          echo "tcx1"
-          ls -al
-          echo "tcx3"
-          ./write_logfiles.csh
+          ./github/workflows/write_logfiles.csh
       - name: trap failure
         if: ${{ failure() }}
         run: |
