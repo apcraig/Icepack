@@ -17,7 +17,7 @@ on:
 
 defaults:
   run:
-    shell: /bin/bash -e {0}
+    shell: /bin/csh -e {0}
 
 jobs:
   build:
@@ -26,15 +26,15 @@ jobs:
     strategy:
       matrix:
 #        os: [macos-latest, ubuntu-latest]
-#        os: [macos-latest]
-        os: [ubuntu-latest]
+        os: [macos-latest]
+#        os: [ubuntu-latest]
         include: 
-#          - os: macos-latest
-#            envdef: macos
-#            minicond: Miniconda3-latest-MacOSX-x86_64.sh
-          - os: ubuntu-latest
-            envdef: linux
-            minicond: Miniconda3-latest-Linux-x86_64.sh
+          - os: macos-latest
+            envdef: macos
+            minicond: Miniconda3-latest-MacOSX-x86_64.sh
+#          - os: ubuntu-latest
+#            envdef: linux
+#            minicond: Miniconda3-latest-Linux-x86_64.sh
     steps:
       - name: reset macos toolchain to commandlinetools
         shell: /bin/bash {0}
@@ -44,7 +44,7 @@ jobs:
           sudo xcode-select -s /Library/Developer/CommandLineTools
           echo "xcrun --show-sdk-path: $(xcrun --show-sdk-path)"
           echo "xcode-select -p: $(xcode-select -p)"
-      - name: system info bash
+      - name: system info
         shell: /bin/bash {0}
         run: |
           type wget
@@ -70,27 +70,23 @@ jobs:
           submodules: 'recursive'
       - name: link
         run: |
-          ln -s ${GITHUB_WORKSPACE}/../Icepack ${HOME}/icepack
-          echo "HOME"
-          ls -al ${HOME}/
-          echo "HOME/icepack"
-          ls -al ${HOME}/icepack/
-          echo "GH_WORKSPACE"
-          ls -al ${GITHUB_WORKSPACE}/
+           ln -s ${GITHUB_WORKSPACE}/../Icepack ${HOME}/icepack
+#           ls -al ${HOME}/
+#           ls -al ${GITHUB_WORKSPACE}/
       - name: check for tabs
         run: |
           cd $HOME/icepack
-#          set cnt = 0
-#          set ffiles = `find -P columnphysics configuration/driver -iname "*.f*"`
-#          set cfiles = `find -P columnphysics configuration/driver -iname "*.c*"`
-#          foreach file ($ffiles $cfiles)
-#            set fcnt = `sed -n '/\t/p' $file | wc -l`
-#            @ cnt = $cnt + $fcnt
-#            if ($fcnt > 0) then
-#               echo "TAB found: $fcnt $file"
-#            endif
-#          end
-#          exit $cnt
+          set cnt = 0
+          set ffiles = `find -P columnphysics configuration/driver -iname "*.f*"`
+          set cfiles = `find -P columnphysics configuration/driver -iname "*.c*"`
+          foreach file ($ffiles $cfiles)
+            set fcnt = `sed -n '/\t/p' $file | wc -l`
+            @ cnt = $cnt + $fcnt
+            if ($fcnt > 0) then
+               echo "TAB found: $fcnt $file"
+            endif
+          end
+          exit $cnt
       - name: setup conda env
         shell: /bin/bash {0}
         run: |
@@ -101,7 +97,6 @@ jobs:
           conda env create -f configuration/scripts/machines/environment.yml
       - name: check conda env
         run: |
-          conda init tcsh
           conda activate icepack && which clang && which gfortran && which make
           gfortran --version
           clang --version
@@ -109,7 +104,6 @@ jobs:
       - name: check setup case
         run: |
           cd $HOME/icepack
-          ls -al
           ./icepack.setup -m conda -e ${{ matrix.envdef }} -c case0 --pes 1x1 -s diag1
       - name: check setup test
         run: |
