@@ -120,6 +120,7 @@
       istep = 0         ! local timestep number
       time0=istep0*dt   ! start time
       time=istep0*dt    ! s
+      time_forc=c0      ! forcing time, not used anymore
       yday=c0           ! absolute day number
       mday=0            ! day of the month
       month=0           ! month
